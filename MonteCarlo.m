@@ -6,14 +6,14 @@ m = 0.26*m_0;
 T = 300;
 k = 1.38064e-23;
 v_th = sqrt((2*k*T)/m); 
-
-x = v_th*0.2e-12; 
+sil = 0.2e-12;
+x = v_th*sil; 
 
 ht = 100e-9;
 ln = 200e-9;
 par = 1000;
 pop = 10; 
-iter = 1000;
+iter = 10;
 state = zeros(par,4);
 temp = zeros(iter,1);
 step = ht/v_th/100;
@@ -57,3 +57,6 @@ for j = 1:iter
             ylabel 'temp (K)' 
             pause(1);
 end
+
+p_scat = 1 - exp(-step/sil);
+v_boltz = makedist('Normal','mu',0,'sigma',sqrt(k*T/m));
