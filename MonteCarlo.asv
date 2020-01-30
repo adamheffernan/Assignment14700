@@ -42,11 +42,10 @@ for j = 1:iter
     pos_velo(i,4) = -pos_velo(i,4);
    
     for i = 1:pop
-    plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, '.');
+    traj(j, (i):(i+1)) = pos_velo(i, 1:2); 
     end
-    
     figure(1);
-    
+    plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, '.');
         hold on;
         pause(0.05);
 end
