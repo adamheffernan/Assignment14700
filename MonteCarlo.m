@@ -6,57 +6,112 @@ m = 0.26*m_0;
 T = 300;
 k = 1.38064e-23;
 v_th = sqrt((2*k*T)/m); 
-sil = 0.2e-12;
-x = v_th*sil; 
+mean = 0.2e-12;
+x = v_th*mean; 
 
 ht = 100e-9;
-ln = 200e-9;
-par = 1000;
-pop = 10; 
-iter = 10;
-state = zeros(par,4);
+len = 200e-9;
+par = 10000;
+pop = 50; 
+iter = 500;
+pos_velo = zeros(par,4);
 temp = zeros(iter,1);
+traj = zeros(iter, pop*2);
 step = ht/v_th/100;
 for j = 1:par
     ang = rand*2*pi;
-    state(j,:) = [ln*rand ht*rand v_th*cos(ang) v_th*sin(ang)];
+    pos_velo(j,:) = [len*rand ht*rand v_th*cos(ang) v_th*sin(ang)];
 end
 
 for j = 1:iter
-    state(:,1:2) = state(:,1:2) + step*state(:,3:4);
-    i = state(:,1) > ln;
-    state(i,1) = state(i,1) - ln;
+    pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
     
-    i = state(:,1) < 0;
-    state(i,1) = state(i,1) + ln;
+    i = pos_velo(:,1) > len;
+    pos_velo(i,1) = pos_velo(i,1) - len;
     
-    i = state(:,2) > ht;
-    state(i,2) = 2*ht - state(i,2);
-    state(i,4) = -state(i,4);
+    i = pos_velo(:,1) < 0;
+    pos_velo(i,1) = pos_velo(i,1) + len;
     
-    i = state(:,2) < 0;
-    state(i,2) = -state(i,2);
-    state(i,4) = -state(i,4);
+    i = pos_velo(:,2) > ht;
+    pos_velo(i,2) = 2*ht - pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
     
-     figure(1);
+    i = pos_velo(:,2) < 0;
+    pos_velo(i,2) = -pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+   for i=1:pop
+        traj(j, (i):(i+1)) = pos_velo(i, 1:2);  
+   end 
+    
+        figure(1);
         subplot(2,1,1);
-        
-        plot(state(1:pop,1)./1e-9, state(1:pop,2)./1e-9, 'o');
-        axis([0 ln/1e-9 0 ht/1e-9]);
-        title(sprintf('Trajectories for %d of %d Electrons with Fixed Velocity (Part 1)',...
-        pop,par));
-        xlabel 'x (nm)'
-        ylabel 'y (nm)'
-        
-            subplot(2,1,2);
-            
-            plot(step*(0:j-1), temp(1:j))
-            axis([0 step*iter 0 600])
-            title 'Semiconductor temp'
-            xlabel 'Time (s)' 
-            ylabel 'temp (K)' 
-            pause(1);
+        plot(pos_velo(1:pop,1), pos_velo(1:pop,2), '.');
+        axis([0 len 0 ht]);
+        title (['Trajectories for ', num2str(pop), ' of ', num2str(par), ' Electrons with Fixed Velocity'])
+        xlabel 'x position (m)'
+        ylabel 'y position (m)'
+        subplot(2,1,2);
+        plot(step*(0:j-1), temp(1:j))
+        axis([0 step*iter 0 600])
+        title 'Semiconductor temp'
+        xlabel 'Time (s)' 
+        ylabel 'temp (K)' 
+        pause(0.02);
 end
+figure(2);
+hold on;
+for j=1:pop
+ plot(traj(:,j)./1e-9, traj(:,j+1)./1e-9, '.');
+end
+%%Part 2
 
-p_scat = 1 - exp(-step/sil);
+scat = 1 - exp(-step/mean);
 v_boltz = makedist('Normal','mu',0,'sigma',sqrt(k*T/m));
+
+for j = 1:par
+    ang = rand*2*pi;
+    pos_velo(j,:) = [len*rand ht*rand random(v_boltz) random(v_boltz)];
+end
+for j = 1:iter
+    pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
+    
+    i = pos_velo(:,1) > len;
+    pos_velo(i,1) = pos_velo(i,1) - len;
+    
+    i = pos_velo(:,1) < 0;
+    pos_velo(i,1) = pos_velo(i,1) + len;
+    
+    i = pos_velo(:,2) > ht;
+    pos_velo(i,2) = 2*ht - pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    
+    i = pos_velo(:,2) < 0;
+    pos_velo(i,2) = -pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    
+    i = rand(pop,1) < scat; 
+    pos_velo(i,3:4) = random(v_boltz,[sum(i),2]);
+   for i=1:pop
+        traj(j, (i):(i+1)) = pos_velo(i, 1:2);  
+   end 
+    
+        figure(3);
+        subplot(2,1,1);
+        plot(pos_velo(1:pop,1), pos_velo(1:pop,2), '.');
+        axis([0 len 0 ht]);
+        title (['Trajectories for ', num2str(pop), ' of ', num2str(par), ' Electrons with Fixed Velocity'])
+        xlabel 'x position (m)'
+        ylabel 'y position (m)'
+        subplot(2,1,2);
+        plot(step*(0:j-1), temp(1:j))
+        axis([0 step*iter 0 600])
+        title 'Semiconductor temp'
+        xlabel 'Time (s)' 
+        ylabel 'temp (K)' 
+        pause(0.02);
+end
+figure(4);
+hold on;
+for j=1:pop
+ plot(traj(:,j)./1e-9, traj(:,j+1)./1e-9, '.');
+end

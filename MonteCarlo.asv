@@ -1,0 +1,70 @@
+clear all 
+close all 
+
+m_0 = 9.10938e-31;
+m = 0.26*m_0;
+T = 300;
+k = 1.38064e-23;
+v_th = sqrt((2*k*T)/m); 
+silicon = 0.2e-12;
+x = v_th*silicon; 
+
+ht = 100e-9;
+len = 200e-9;
+par = 1000;
+pop = 50; 
+iter = 100;
+pos_velo = zeros(par,4);
+temp = zeros(iter,1);
+traj = zeros(iter, pop*2);
+step = ht/v_th/100;
+for j = 1:par
+    ang = rand*2*pi;
+    pos_velo(j,:) = [len*rand ht*rand v_th*cos(ang) v_th*sin(ang)];
+   
+end
+
+for j = 1:iter
+    pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
+    
+    i = pos_velo(:,1) > len;
+    pos_velo(i,1) = pos_velo(i,1) - len;
+    
+    i = pos_velo(:,1) < 0;
+    pos_velo(i,1) = pos_velo(i,1) + len;
+    
+    i = pos_velo(:,2) > ht;
+    pos_velo(i,2) = 2*ht - pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    
+    i = pos_velo(:,2) < 0;
+    pos_velo(i,2) = -pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+   for i=1:pop
+        traj(j, (2*i):(2*i+1)) = pos_velo(i, 1:2);  
+   end 
+    
+        figure(1);
+        subplot(2,1,1);
+        plot(pos_velo(1:pop,1), pos_velo(1:pop,2), '.');
+        axis([0 len 0 ht]);
+        title (['Trajectories for ', num2str(pop), ' of ', num2str(par), ' Electrons with Fixed Velocity'])
+        xlabel 'x position (m)'
+        ylabel 'y position (m)'
+        subplot(2,1,2);
+        plot(step*(0:j-1), temp(1:j))
+        axis([0 step*iter 0 600])
+        title 'Semiconductor temp'
+        xlabel 'Time (s)' 
+        ylabel 'temp (K)' 
+        pause(0.02);
+end
+figure(2);
+hold on;
+for j=1:pop
+ plot(traj(:,j*2)./1e-9, traj(:,j*2+1)./1e-9, '.'); 
+end
+%%Part 2
+
+p_scat = 1 - exp(-step/silicon);
+v_boltz = makedist('Normal','mu',0,'sigma',sqrt(k*T/m));
