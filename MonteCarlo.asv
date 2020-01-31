@@ -11,12 +11,12 @@ x = v_th*mean;
 
 width = 100e-9;
 len = 200e-9;
-par = 10000;
+par = 1000;
 pop = 50; 
 iter = 500;
 pos_velo = zeros(par,4);
 temp = zeros(iter,1);
-traj = zeros(iter, pop*2);
+traj = zeros(iter, 2*pop);
 step = width/v_th/100;
 for j = 1:par
     ang = rand*2*pi;
@@ -27,6 +27,7 @@ for j = 1:iter
     
     pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
     
+    traj(1:iter,j:j+1) = [pos_velo(1:iter,1) pos_velo(1:iter,2)];
     i = pos_velo(:,1) > len;
     pos_velo(i,1) = pos_velo(i,1) - len;
     
@@ -40,15 +41,14 @@ for j = 1:iter
     i = pos_velo(:,2) < 0;
     pos_velo(i,2) = -pos_velo(i,2);
     pos_velo(i,4) = -pos_velo(i,4);
-   
-    for i = 1:pop
-    traj(j, (i):(i+1)) = pos_velo(i, 1:2); 
-    end
+    
+    plot(traj(1:iter,j)./1e-9, traj(1:iter,j+1)./1e-9, '.');
     figure(1);
-    plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, '.');
-        hold on;
-        pause(0.05);
+    hold on;
+    pause(0.05);   
+ 
 end
+ 
        
 scat = 1 - exp(-step/mean);
 v_boltz = makedist('Normal','mu',0,'sigma',sqrt(k*T/m));
