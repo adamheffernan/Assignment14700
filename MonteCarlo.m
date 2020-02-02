@@ -78,7 +78,6 @@ for i = 1:pop
         title('Trajectories of Electrons in Silicon Crystal')
         xlabel('(nm)')
         ylabel('(nm)')
-        pause(0.5)
         hold on;   
         
 end
@@ -139,7 +138,7 @@ end
     sprintf('Average Temperature in the Crystal is %s K and the Average Electron Velocities in Silicon Crystal are %s m/s',num2str(av_temp),num2str(velocity_average))
 for i = 1:pop
         
-        t=1;
+        
         color = [rand rand rand];
         figure(4);
         plot(traj(i,2:2:end)./1e-9, traj(i,1:2:end-1)./1e-9, '.', 'Color',color)
@@ -147,7 +146,6 @@ for i = 1:pop
         title('Trajectories of Electrons in Silicon Crystal')
         xlabel('(nm)')
         ylabel('(nm)')
-        pause(0.5)
         hold on
         
 end
