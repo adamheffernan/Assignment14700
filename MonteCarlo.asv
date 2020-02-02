@@ -72,13 +72,14 @@ end
 
 for i = 1:pop
         color = [rand rand rand];
+        j=1;
         figure(2)  
-        plot(traj(i,2:2:end)./1e-9, traj(i,1:2:end-1)./1e-9, '.', 'Color',color);
+        plot(traj(i,:2:end)./1e-9, traj(i,2:2:end)./1e-9, '.', 'Color',color);
         axis([0 len/1e-9 0 width/1e-9]);
         title('Trajectories of Electrons in Silicon Crystal')
         xlabel('(nm)')
         ylabel('(nm)')
-        pause(0.5)
+        
         hold on;   
         
 end
@@ -142,12 +143,12 @@ for i = 1:pop
         t=1;
         color = [rand rand rand];
         figure(4);
-        plot(traj(i,2:2:end)./1e-9, traj(i,1:2:end-1)./1e-9, '.', 'Color',color)
+        plot(traj(i,1:2:end-1)./1e-9, traj(i,2:2:end)./1e-9, '.', 'Color',color)
         axis([0 len/1e-9 0 width/1e-9])
         title('Trajectories of Electrons in Silicon Crystal')
         xlabel('(nm)')
         ylabel('(nm)')
-        pause(0.5)
+        pause(0.1)
         hold on
         
 end
