@@ -79,6 +79,7 @@ for i = 1:pop
         xlabel('(nm)')
         ylabel('(nm)')
         hold on;   
+        pause(0.5);
         
 end
     scat = 1 - exp(-step/mean);
@@ -146,7 +147,8 @@ for i = 1:pop
         title('Trajectories of Electrons in Silicon Crystal')
         xlabel('(nm)')
         ylabel('(nm)')
-        hold on
+        hold on;
+        pause(0.5)
         
 end
     figure(3);
