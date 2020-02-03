@@ -26,79 +26,79 @@ l=v_th*mean;
 %Outputting mean free path and thermal velocity for part 1
 fprintf('Thermal Velocity for part 1 is %f km/s\n',v_th/10^3)
 fprintf('Mean free path for part 1 is %f nm\n',l/10^-9);
-% %%Question 1
-% for j = 1:par
-%     %Creating a position, velocity vector in the x and y directions for
-%     %the number of particles in the simulation.
-%     ang = rand*2*pi;
-%     pos_velo(j,:) = [length*rand width*rand v_th*cos(ang) v_th*sin(ang)];
-% end
-% 
-% for j = 1:iter
-%     %Updating the position velocity vector at each iteration. Using step
-%     %size * position velocity vector of each particle at each iteration in
-%     %time plus the previous X and Y locations of the particle respectively.
-%     %
-%     pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
-%     %
-%     %Left Bound Check
-%     i = pos_velo(:,1) > length;
-%     pos_velo(i,1) = pos_velo(i,1) - length;
-%     %
-%     %Right Bound Check
-%     %
-%     i = pos_velo(:,1) < 0;
-%     pos_velo(i,1) = pos_velo(i,1) + length;
-%     %
-%     %Top Bound Check
-%     i = pos_velo(:,2) > width;
-%     pos_velo(i,2) = 2*width - pos_velo(i,2);
-%     pos_velo(i,4) = -pos_velo(i,4);
-%     %
-%     %Bottom Bound Check
-%     i = pos_velo(:,2) < 0;
-%     pos_velo(i,2) = -pos_velo(i,2);
-%     pos_velo(i,4) = -pos_velo(i,4);
-%     %
-%     %Storing the Temperature value of the semiconductor at each iteration
-%     temp(j) = (sum(pos_velo(:,3).^2) + sum(pos_velo(:,4).^2))*m/k/2/par;
-%     %Storing the Trajectory value of the semiconductor at each iteration
-%     traj(1:iter,2*j:2*j+1) = [pos_velo(1:iter,1) pos_velo(1:iter,2)];
-%     figure(1);
-%     subplot(2,1,1)
-%     %Plotting each particle in the population at each time step
-%     plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, 'o');
-%     axis([0 length/1e-9 0 width/1e-9]);
-%     title('Simulation of Electrons in Silicon Crystal')
-%     xlabel('(nm)')
-%     ylabel('(nm)')
-%     subplot(2,1,2)
-%     %Plotting the temperature of the Silicon crystal over time
-%     plot(step*(0:j-1), temp(1:j),'Color',[0.1 0.1 0.1]);
-%     axis([0 step*iter 200 400]);
-%     title('Temperature of Electrons in Silicon Crystal')
-%     xlabel('Time(s)')
-%     ylabel('Temperature(K)')
-%     hold on;
-% end
-% 
-% 
-% for i = 1:pop
-%     
-%     %Setting a Random colour each particle
-%     color = [rand rand rand];
-%     figure(2)
-%     %Plotting the trajectory vector of each particle in the shown
-%     %population
-%     plot(traj(i,2:2:end)./1e-9, traj(i,1:2:end-1)./1e-9, '.', 'Color',color);
-%     axis([0 length/1e-9 0 width/1e-9]);
-%     title('Trajectories of Electrons in Silicon Crystal')
-%     xlabel('(nm)')
-%     ylabel('(nm)')
-%     hold on;
-%     pause(0.5);
-%     
-% end
+%%Question 1
+for j = 1:par
+    %Creating a position, velocity vector in the x and y directions for
+    %the number of particles in the simulation.
+    ang = rand*2*pi;
+    pos_velo(j,:) = [length*rand width*rand v_th*cos(ang) v_th*sin(ang)];
+end
+
+for j = 1:iter
+    %Updating the position velocity vector at each iteration. Using step
+    %size * position velocity vector of each particle at each iteration in
+    %time plus the previous X and Y locations of the particle respectively.
+    %
+    pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
+    %
+    %Left Bound Check
+    i = pos_velo(:,1) > length;
+    pos_velo(i,1) = pos_velo(i,1) - length;
+    %
+    %Right Bound Check
+    %
+    i = pos_velo(:,1) < 0;
+    pos_velo(i,1) = pos_velo(i,1) + length;
+    %
+    %Top Bound Check
+    i = pos_velo(:,2) > width;
+    pos_velo(i,2) = 2*width - pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    %
+    %Bottom Bound Check
+    i = pos_velo(:,2) < 0;
+    pos_velo(i,2) = -pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    %
+    %Storing the Temperature value of the semiconductor at each iteration
+    temp(j) = (sum(pos_velo(:,3).^2) + sum(pos_velo(:,4).^2))*m/k/2/par;
+    %Storing the Trajectory value of the semiconductor at each iteration
+    traj(1:iter,2*j:2*j+1) = [pos_velo(1:iter,1) pos_velo(1:iter,2)];
+    figure(1);
+    subplot(2,1,1)
+    %Plotting each particle in the population at each time step
+    plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, 'o');
+    axis([0 length/1e-9 0 width/1e-9]);
+    title('Simulation of Electrons in Silicon Crystal')
+    xlabel('(nm)')
+    ylabel('(nm)')
+    subplot(2,1,2)
+    %Plotting the temperature of the Silicon crystal over time
+    plot(step*(0:j-1), temp(1:j),'Color',[0.1 0.1 0.1]);
+    axis([0 step*iter 200 400]);
+    title('Temperature of Electrons in Silicon Crystal')
+    xlabel('Time(s)')
+    ylabel('Temperature(K)')
+    hold on;
+end
+
+
+for i = 1:pop
+    
+    %Setting a Random colour each particle
+    color = [rand rand rand];
+    figure(2)
+    %Plotting the trajectory vector of each particle in the shown
+    %population
+    plot(traj(i,2:2:end)./1e-9, traj(i,1:2:end-1)./1e-9, '.', 'Color',color);
+    axis([0 length/1e-9 0 width/1e-9]);
+    title('Trajectories of Electrons in Silicon Crystal')
+    xlabel('(nm)')
+    ylabel('(nm)')
+    hold on;
+    pause(0.5);
+    
+end
 %%Question 2
 %Calculating the probability of a scattering particle
 scat = 1 - exp(-step/mean);
@@ -113,63 +113,63 @@ for j = 1:par
 end
 
 
-% for j = 1:iter
-%     %Updating the position velocity vector at each iteration. Using step
-%     %size * position velocity vector of each particle at each iteration in
-%     %time plus the previous X and Y locations of the particle respectively.
-%     %
-%     pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
-%     %
-%     %Left Bound Check
-%     %
-%     i = pos_velo(:,1) > length;
-%     pos_velo(i,1) = pos_velo(i,1) - length;
-%     %
-%     %Right Bound Check
-%     %
-%     i = pos_velo(:,1) < 0;
-%     pos_velo(i,1) = pos_velo(i,1) + length;
-%     %
-%     %Top Bound check
-%     %
-%     i = pos_velo(:,2) > width;
-%     pos_velo(i,2) = 2*width - pos_velo(i,2);
-%     pos_velo(i,4) = -pos_velo(i,4);
-%     %
-%     %Bottom Bound check
-%     %
-%     i = pos_velo(:,2) < 0;
-%     pos_velo(i,2) = -pos_velo(i,2);
-%     pos_velo(i,4) = -pos_velo(i,4);
-%     %Creating a random number t for each particle in the population that is
-%     %the probability of this particle scattering at this time iteration
-%     t=rand(pop,1);
-%     %Setting i equal to a logical index array with the amount of colisions.
-%     i= t < scat;
-%     pos_velo(i,3:4) = random(v_boltz, [sum(i),2]);
-%     %Incrementing the total number of scattered particles
-%     total_scatters = total_scatters + count_scatters(i);
-%     %Storing the Temperature value of the semiconductor at each iteration
-%     temp(j) = (sum(pos_velo(:,3).^2) + sum(pos_velo(:,4).^2))*m/k/2/par;
-%     %Storing the Trajectory value of the semiconductor at each iteration
-%     traj(1:iter,2*j:2*j+1) = [pos_velo(1:iter,1) pos_velo(1:iter,2)];
-%     figure(3)
-%     subplot(3,1,1)
-%     %Plotting each particle in the population at each time step
-%     plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, 'o')
-%     axis([0 length/1e-9 0 width/1e-9])
-%     title('Simulation of Electrons in Silicon Crystal')
-%     xlabel('(nm)')
-%     ylabel('(nm)')
-%     subplot(3,1,2)
-%     %Plotting the temperature of the Silicon crystal over time
-%     plot(step*(0:j-1), temp(1:j),'Color',[0.1 0.1 0.1])
-%     axis([0 step*iter 200 400]);
-%     title('Temperature of Electrons in Silicon Crystal')
-%     xlabel('Time(s)')
-%     ylabel('Temperature(K)')
-%     hold on;
-% end
+for j = 1:iter
+    %Updating the position velocity vector at each iteration. Using step
+    %size * position velocity vector of each particle at each iteration in
+    %time plus the previous X and Y locations of the particle respectively.
+    %
+    pos_velo(:,1:2) = pos_velo(:,1:2) + step*pos_velo(:,3:4);
+    %
+    %Left Bound Check
+    %
+    i = pos_velo(:,1) > length;
+    pos_velo(i,1) = pos_velo(i,1) - length;
+    %
+    %Right Bound Check
+    %
+    i = pos_velo(:,1) < 0;
+    pos_velo(i,1) = pos_velo(i,1) + length;
+    %
+    %Top Bound check
+    %
+    i = pos_velo(:,2) > width;
+    pos_velo(i,2) = 2*width - pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    %
+    %Bottom Bound check
+    %
+    i = pos_velo(:,2) < 0;
+    pos_velo(i,2) = -pos_velo(i,2);
+    pos_velo(i,4) = -pos_velo(i,4);
+    %Creating a random number t for each particle in the population that is
+    %the probability of this particle scattering at this time iteration
+    t=rand(pop,1);
+    %Setting i equal to a logical index array with the amount of colisions.
+    i= t < scat;
+    pos_velo(i,3:4) = random(v_boltz, [sum(i),2]);
+    %Incrementing the total number of scattered particles
+    total_scatters = total_scatters + count_scatters(i);
+    %Storing the Temperature value of the semiconductor at each iteration
+    temp(j) = (sum(pos_velo(:,3).^2) + sum(pos_velo(:,4).^2))*m/k/2/par;
+    %Storing the Trajectory value of the semiconductor at each iteration
+    traj(1:iter,2*j:2*j+1) = [pos_velo(1:iter,1) pos_velo(1:iter,2)];
+    figure(3)
+    subplot(3,1,1)
+    %Plotting each particle in the population at each time step
+    plot(pos_velo(1:pop,1)./1e-9, pos_velo(1:pop,2)./1e-9, 'o')
+    axis([0 length/1e-9 0 width/1e-9])
+    title('Simulation of Electrons in Silicon Crystal')
+    xlabel('(nm)')
+    ylabel('(nm)')
+    subplot(3,1,2)
+    %Plotting the temperature of the Silicon crystal over time
+    plot(step*(0:j-1), temp(1:j),'Color',[0.1 0.1 0.1])
+    axis([0 step*iter 200 400]);
+    title('Temperature of Electrons in Silicon Crystal')
+    xlabel('Time(s)')
+    ylabel('Temperature(K)')
+    hold on;
+end
 
 %Calculate the average time
 t_mn = ((step*iter*pop)/total_scatters);
