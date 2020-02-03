@@ -1,4 +1,4 @@
-%%Adam Heffernan 100977570 Assignment 1 ELEC 4700. Completed on 2/1/2020.
+%% Adam Heffernan 100977570 Assignment 1 ELEC 4700. Completed on 2/1/2020.
 
 clc
 close all
@@ -13,7 +13,7 @@ width = 100e-9;%Width of Wafer
 length = 200e-9;%Length of the channel
 par = 10000;%Particles
 pop = 10; %Mapping population
-iter = 200;%Iterations
+iter = 1000;%Iterations
 pos_velo = zeros(par,4);%Initializing position velocity Matrix
 temp = zeros(iter,1);%Initializing position velocity Matrix
 traj = zeros(iter, 2*pop);%Initializing trajectory Matrix
@@ -26,7 +26,7 @@ l=v_th*mean;
 %Outputting mean free path and thermal velocity for part 1
 fprintf('Thermal Velocity for part 1 is %f km/s\n',v_th/10^3)
 fprintf('Mean free path for part 1 is %f nm\n',l/10^-9);
-%%Question 1
+%% Question 1
 for j = 1:par
     %Creating a position, velocity vector in the x and y directions for
     %the number of particles in the simulation.
@@ -99,7 +99,7 @@ for i = 1:pop
     pause(0.5);
     
 end
-%%Question 2
+%% Question 2
 %Calculating the probability of a scattering particle
 scat = 1 - exp(-step/mean);
 %Calculating a normal maxwell-boltzmann distribution
@@ -211,7 +211,7 @@ histogram(velocity)
 title('Histogram of Electron Velocities in Silicon Crystal')
 xlabel('Velocity (km/s)')
 ylabel('Frequency')
-%%Question 3
+%% Question 3
 %Creating Box Parameters for boxes shown in plots
 x1_box1=80;
 x2_box1=120;
@@ -492,15 +492,15 @@ ylabel('y (nm)');
 % 
 %Creating a temperature sum variable for the length and width of the
 %silicon crystal
-temp_sum = zeros(ceil((length)/10/10^-9), ceil((width)/10/10^-9));
+temp_sum = zeros(ceil((length)/10^-9)+1, ceil((width)/10^-9)+1);
 %Counting the temperature variables for the length and width of the
 %silicon crystal
-temp_num = zeros(ceil((length)/10/10^-9), ceil((width)/10/10^-9));
+temp_num = zeros(ceil((length)/10^-9)+1, ceil((width)/10^-9)+1);
 
 for i = 1:par
     %
-    x = floor(pos_velo(i, 1)/10/10^-9);
-    y = floor(pos_velo(i, 2)/10/10^-9);
+    x = floor(pos_velo(i, 1)/10^-9);
+    y = floor(pos_velo(i, 2)/10^-9);
     %
     if (x==0)
         x = 1;
@@ -515,9 +515,11 @@ end
 
 %Calculating temperature matrix
 temperature_matrix = temp_sum.*(m./k./2./temp_num);
+temperature_matrix(isnan(temperature_matrix)) = 0;
+figure(8);
 %Performing convolution of the two matrices and plotting the convolution
 imagesc(conv2(temperature_matrix,smooth_func));
-title('Temperature Map of Silicon Crystal');
+title('Temperature Map of Silicon Crystal')
 xlabel('x (nm)');
 ylabel('y (nm)');
 
