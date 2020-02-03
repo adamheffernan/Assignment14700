@@ -13,7 +13,7 @@ width = 100e-9;%Width of Wafer
 length = 200e-9;%Length of the channel
 par = 10000;%Particles
 pop = 10; %Mapping population
-iter = 1000;%Iterations
+iter = 100;%Iterations
 pos_velo = zeros(par,4);%Initializing position velocity Matrix
 temp = zeros(iter,1);%Initializing position velocity Matrix
 traj = zeros(iter, 2*pop);%Initializing trajectory Matrix
@@ -471,18 +471,6 @@ fprintf('Average Electron Velocities in Silicon Crystal for part 3 are %f km/s \
 fprintf('Average time for part 3 is %f ps\n',t_mn/10^-12);
 %Output the mean free path
 fprintf('Mean free Path for part 3 is %f nm\n',mfp);
-for j = 1:par
-    %Creating a position, velocity vector in the x and y directions for
-    %the number of particles in the simulation.
-    ang = rand*2*pi;
-    pos_velo(j,:) = [length*rand width*rand random(v_boltz) random(v_boltz)];
-    while(in_box(pos_velo(j,1:2), boxes))
-        %Checking for Particles in box, when particles are in
-        %box we will reset there x and y position to a random
-        %value
-        pos_velo(j,1:2) = [length*rand width*rand];
-    end
-end
 figure(7)
 %Creating a 3D Histogram with x and y positions
 electron_density = hist3([pos_velo(:,1),pos_velo(:,2)],[200 100]);
@@ -493,7 +481,7 @@ sigma = 4;
 smooth_func = exp(-u.^2/(2*sigma^2)-v.^2/(2*sigma^2));
 smooth_func = smooth_func./sum(smooth_func(:));
 %Performing convolution of the two matrices and plotting the convolution
-imagesc(conv2(transpose(electron_density),smooth_func));
+imagesc(conv2(electron_density,smooth_func));
 title('Electron Density Map in Silicon Crystal');
 xlabel('x (nm)');
 ylabel('y (nm)');
@@ -527,9 +515,10 @@ end
 %Calculating temperature matrix
 temperature_matrix = temp_sum.*(m./k./2./temp_num);
 temperature_matrix(isnan(temperature_matrix)) = 0;
+temperature_matrix = transpose(temperature_matrix);
 figure(8);
 %Performing convolution of the two matrices and plotting the convolution
-imagesc(conv2(transpose(temperature_matrix),smooth_func));
+imagesc(conv2(temperature_matrix,smooth_func));
 title('Temperature Map of Silicon Crystal')
 xlabel('x (nm)');
 ylabel('y (nm)');
